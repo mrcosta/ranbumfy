@@ -1,0 +1,7 @@
+[package]
+name = "ranbumfy"
+version = "0.1.0"
+authors = ["Mateus Costa <mateuscomp@gmail.com>"]
+
+[dependencies]
+rspotify = "0.2.1"

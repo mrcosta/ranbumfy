@@ -1,0 +1,5 @@
+.idea
+.spotify_token_cache.json
+*.env
+/target
+**/*.rs.bk
