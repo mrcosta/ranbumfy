@@ -35,16 +35,14 @@ test:stable:
 #  allow_failure: true
 #  <<: *cargo_test
 
-# Always want to run rustfmt and clippy against our tests, to ensure that
-# we aren't using any anti-patterns or failing to follow our style guide
 # lint:rustfmt:
 #  image: "guangie88/rustfmt-clippy"
 #  # allow_failure: true
 #  script:
 #    - cargo fmt -- --write-mode=diff
 #
-# lint:clippy:
-#  image: "guangie88/rustfmt-clippy"
-#  allow_failure: true
-#  script:
-#    - cargo clippy -- -D warnings # Turn all warnings into errors
+lint:clippy:
+  image: "guangie88/rustfmt-clippy"
+  allow_failure: true
+  script:
+    - cargo clippy -- -D warnings # Turn all warnings into errors
