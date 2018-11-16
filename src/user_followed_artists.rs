@@ -49,3 +49,12 @@ fn get_token_info() -> TokenInfo {
         None => panic!("tretas"),
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_zero() {
+        assert_eq!("zero", "zero");
+    }
+}
