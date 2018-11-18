@@ -11,20 +11,20 @@ pub fn get_followed_artists() {
     let artists_and_ids = get_all_followed_artists(&spotify);
     let artist_albums_ids = get_artist_albums_ids(&spotify, artists_and_ids);
 
-//        for album in &albums {
-//            println!("{:?}", album.artists);
-//        };
-//        let albums_id = albums
-//            .iter()
-//            .map(|album| &album.id)
-//            .collect::<Vec<&String>>();
-//        println!("oie {}", albums_id[0]);
+    //        for album in &albums {
+    //            println!("{:?}", album.artists);
+    //        };
+    //        let albums_id = albums
+    //            .iter()
+    //            .map(|album| &album.id)
+    //            .collect::<Vec<&String>>();
+    //        println!("oie {}", albums_id[0]);
 
-//        for album_id in album_ids {
-//            let response = spotify.albums(&album_id.id); // use albums
-//            let album = response.ok().unwrap().name;
-//            println!("{}", album);
-//        }
+    //        for album_id in album_ids {
+    //            let response = spotify.albums(&album_id.id); // use albums
+    //            let album = response.ok().unwrap().name;
+    //            println!("{}", album);
+    //        }
 }
 
 fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
@@ -50,7 +50,10 @@ fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
     artists_and_ids
 }
 
-fn get_artist_albums_ids(spotify: &Spotify, artists_and_ids: HashMap<String, String>) -> HashMap<String, Vec<String>> {
+fn get_artist_albums_ids(
+    spotify: &Spotify,
+    artists_and_ids: HashMap<String, String>,
+) -> HashMap<String, Vec<String>> {
     let mut artist_and_albums_ids = HashMap::new();
 
     println!("Number of artists: {}", artists_and_ids.iter().len());
