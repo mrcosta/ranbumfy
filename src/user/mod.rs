@@ -1,45 +1,20 @@
 mod authentication;
+mod artist;
 
+use user::artist::{ Album, Artist };
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::senum::AlbumType;
 use std::collections::HashMap;
 use user::authentication::get_spotify;
 
-//struct User {
-//    followed_artists: Vec<Artist>
-//}
-
-struct Artist {
-    name: String,
-    id: String,
-    albums: Vec<Album>
-}
-
-#[derive(Debug)]
-struct Album {
-    name: String,
-    id: String
-}
-
 pub fn get_followed_artists() {
     let spotify = get_spotify();
     let artists_and_ids = get_all_followed_artists(&spotify);
+    // TODO: randomize artist here
+//    let artists = get_artist_albums_ids(&spotify, artists_and_ids);
+
     get_artist_albums_ids(&spotify, artists_and_ids);
-
-    //        for album in &albums {
-    //            println!("{:?}", album.artists);
-    //        };
-    //        let albums_id = albums
-    //            .iter()
-    //            .map(|album| &album.id)
-    //            .collect::<Vec<&String>>();
-    //        println!("oie {}", albums_id[0]);
-
-    //        for album_id in album_ids {
-    //            let response = spotify.albums(&album_id.id); // use albums
-    //            let album = response.ok().unwrap().name;
-    //            println!("{}", album);
-    //        }
+//    let randomized_artist = get_random_artist();
 }
 
 fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
