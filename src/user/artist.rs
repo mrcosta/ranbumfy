@@ -7,5 +7,6 @@ pub struct Artist {
 #[derive(Debug)]
 pub struct Album {
     pub name: String,
-    pub id: String
+    pub id: String,
+    pub url: String
 }

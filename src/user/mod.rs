@@ -4,6 +4,7 @@ mod artist;
 use user::authentication::get_spotify;
 use user::artist::{ Album, Artist };
 use rand::thread_rng;
+use rand::Rng;
 use rand::seq::SliceRandom;
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::senum::AlbumType;
@@ -19,8 +20,9 @@ pub fn get_followed_artists() {
 
     let randomized_artist_name = artists_names.choose(& mut thread_rng()).unwrap();
     let artist_id = artists_and_ids.get(randomized_artist_name).unwrap();
-    println!("You are going to listen to {}", randomized_artist_name);
-//    let albums = get_artist_albums(&spotify, artists_and_ids);
+    let randomized_album = get_randomized_album(&spotify, artist_id);
+
+    println!("You are going to listen to {} from {}", randomized_album.name, randomized_artist_name);
 //    get_artist_albums_ids(&spotify, artists_and_ids);
 //    let randomized_artist = get_random_artist();
 }
@@ -41,38 +43,28 @@ fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
         if next_request.is_none() {
             break;
         } else {
-            println!("Doing next request: {:?}", next_request);
+            // TODO: use log info
+//            println!("Doing next request: {:?}", next_request);
         }
     }
 
     artists_and_ids
 }
 
-fn get_artist_albums(
-    spotify: &Spotify,
-    artists_and_ids: HashMap<String, String>,
-) -> Vec<Artist> {
-    let mut artists = Vec::new();
+fn get_randomized_album(spotify: &Spotify, id: &str) -> Album {
+    let response = spotify.artist_albums(&id, Some(AlbumType::Album), None, Some(50), None);
+    let albums = response.ok().unwrap().items;
 
-    println!("Number of artists: {}", artists_and_ids.iter().len());
-    for (name, id) in artists_and_ids {
-        let response = spotify.artist_albums(&id, Some(AlbumType::Album), None, Some(50), None);
-        let albums_response = response.ok().unwrap().items;
+    let randomized_album_from_response = albums.choose(& mut thread_rng()).unwrap();
+    let name = &randomized_album_from_response.name;
+    let id = &randomized_album_from_response.id;
+    let url = "url".to_string();
 
-        let albums = albums_response
-            .into_iter()
-            .map(|album| Album {
-                             name: album.name,
-                             id: album.id
-            })
-            .collect::<Vec<Album>>();
-
-        let artist = Artist { name, id, albums };
-        println!("Got the follow albums from {}: {:?}", artist.name, artist.albums);
-        artists.push(artist);
-    }
-
-    artists
+    return Album {
+        name: name.to_string(),
+        id: id.to_string(),
+        url: "b".to_string(),
+    };
 }
 
 #[cfg(test)]
