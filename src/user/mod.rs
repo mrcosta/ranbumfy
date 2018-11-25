@@ -5,6 +5,22 @@ use rspotify::spotify::senum::AlbumType;
 use std::collections::HashMap;
 use user::authentication::get_spotify;
 
+//struct User {
+//    followed_artists: Vec<Artist>
+//}
+
+struct Artist {
+    name: String,
+    id: String,
+    albums: Vec<Album>
+}
+
+#[derive(Debug)]
+struct Album {
+    name: String,
+    id: String
+}
+
 pub fn get_followed_artists() {
     let spotify = get_spotify();
     let artists_and_ids = get_all_followed_artists(&spotify);
@@ -52,24 +68,28 @@ fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
 fn get_artist_albums_ids(
     spotify: &Spotify,
     artists_and_ids: HashMap<String, String>,
-) -> HashMap<String, Vec<String>> {
-    let mut artist_and_albums_ids = HashMap::new();
+) -> Vec<Artist> {
+    let mut artists = Vec::new();
 
     println!("Number of artists: {}", artists_and_ids.iter().len());
-    for (artist, id) in artists_and_ids {
+    for (name, id) in artists_and_ids {
         let response = spotify.artist_albums(&id, Some(AlbumType::Album), None, Some(50), None);
-        let albums = response.ok().unwrap().items;
+        let albums_response = response.ok().unwrap().items;
 
-        let albums_ids = albums
+        let albums = albums_response
             .into_iter()
-            .map(|album| album.id)
-            .collect::<Vec<String>>();
+            .map(|album| Album {
+                             name: album.name,
+                             id: album.id
+            })
+            .collect::<Vec<Album>>();
 
-        println!("Got the follow albums from {}: {:?}", artist, albums_ids);
-        artist_and_albums_ids.insert(artist, albums_ids);
+        let artist = Artist { name, id, albums };
+        println!("Got the follow albums from {}: {:?}", artist.name, artist.albums);
+        artists.push(artist);
     }
 
-    artist_and_albums_ids
+    artists
 }
 
 #[cfg(test)]
