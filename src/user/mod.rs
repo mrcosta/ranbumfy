@@ -1,15 +1,13 @@
-extern crate rspotify;
+mod authentication;
 
 use rspotify::spotify::client::Spotify;
-use rspotify::spotify::oauth2::{SpotifyClientCredentials, SpotifyOAuth, TokenInfo};
 use rspotify::spotify::senum::AlbumType;
-use rspotify::spotify::util::get_token;
 use std::collections::HashMap;
 
 pub fn get_followed_artists() {
-    let spotify = get_spotify();
+    let spotify = authentication::get_spotify();
     let artists_and_ids = get_all_followed_artists(&spotify);
-    let artist_albums_ids = get_artist_albums_ids(&spotify, artists_and_ids);
+    get_artist_albums_ids(&spotify, artists_and_ids);
 
     //        for album in &albums {
     //            println!("{:?}", album.artists);
@@ -71,27 +69,6 @@ fn get_artist_albums_ids(
     }
 
     artist_and_albums_ids
-}
-
-fn get_spotify() -> Spotify {
-    let token_info = get_token_info();
-
-    let client_credential = SpotifyClientCredentials::default()
-        .token_info(token_info)
-        .build();
-
-    Spotify::default()
-        .client_credentials_manager(client_credential)
-        .build()
-}
-
-fn get_token_info() -> TokenInfo {
-    let mut oauth = SpotifyOAuth::default().scope("user-follow-read").build();
-
-    match get_token(&mut oauth) {
-        Some(token_info) => token_info,
-        None => panic!("tretas"),
-    }
 }
 
 #[cfg(test)]
