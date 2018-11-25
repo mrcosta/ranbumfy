@@ -23,8 +23,7 @@ pub fn get_followed_artists() {
     let randomized_album = get_randomized_album(&spotify, artist_id);
 
     println!("You are going to listen to {} from {}", randomized_album.name, randomized_artist_name);
-//    get_artist_albums_ids(&spotify, artists_and_ids);
-//    let randomized_artist = get_random_artist();
+    println!("Here's the url: {}", randomized_album.url);
 }
 
 fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
@@ -58,12 +57,12 @@ fn get_randomized_album(spotify: &Spotify, id: &str) -> Album {
     let randomized_album_from_response = albums.choose(& mut thread_rng()).unwrap();
     let name = &randomized_album_from_response.name;
     let id = &randomized_album_from_response.id;
-    let url = "url".to_string();
+    let url = &randomized_album_from_response.external_urls.get("spotify").unwrap();
 
     return Album {
         name: name.to_string(),
         id: id.to_string(),
-        url: "b".to_string(),
+        url: url.to_string(),
     };
 }
 
