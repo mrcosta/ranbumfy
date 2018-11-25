@@ -3,9 +3,10 @@ mod authentication;
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::senum::AlbumType;
 use std::collections::HashMap;
+use user::authentication::get_spotify;
 
 pub fn get_followed_artists() {
-    let spotify = authentication::get_spotify();
+    let spotify = get_spotify();
     let artists_and_ids = get_all_followed_artists(&spotify);
     get_artist_albums_ids(&spotify, artists_and_ids);
 

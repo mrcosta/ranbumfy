@@ -1,8 +1,8 @@
 extern crate rspotify;
 
+use rspotify::spotify::client::Spotify;
 use rspotify::spotify::oauth2::{SpotifyClientCredentials, SpotifyOAuth, TokenInfo};
 use rspotify::spotify::util::get_token;
-use rspotify::spotify::client::Spotify;
 
 pub fn get_spotify() -> Spotify {
     let token_info = get_token_info();
