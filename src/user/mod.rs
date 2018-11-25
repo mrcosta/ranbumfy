@@ -1,19 +1,27 @@
 mod authentication;
 mod artist;
 
+use user::authentication::get_spotify;
 use user::artist::{ Album, Artist };
+use rand::thread_rng;
+use rand::seq::SliceRandom;
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::senum::AlbumType;
 use std::collections::HashMap;
-use user::authentication::get_spotify;
 
 pub fn get_followed_artists() {
     let spotify = get_spotify();
     let artists_and_ids = get_all_followed_artists(&spotify);
-    // TODO: randomize artist here
-//    let artists = get_artist_albums_ids(&spotify, artists_and_ids);
+    let artists_names = artists_and_ids
+        .keys()
+        .map(|v| v.clone())
+        .collect::<Vec<String>>();
 
-    get_artist_albums_ids(&spotify, artists_and_ids);
+    let randomized_artist_name = artists_names.choose(& mut thread_rng()).unwrap();
+    let artist_id = artists_and_ids.get(randomized_artist_name).unwrap();
+    println!("You are going to listen to {}", randomized_artist_name);
+//    let albums = get_artist_albums(&spotify, artists_and_ids);
+//    get_artist_albums_ids(&spotify, artists_and_ids);
 //    let randomized_artist = get_random_artist();
 }
 
@@ -40,7 +48,7 @@ fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
     artists_and_ids
 }
 
-fn get_artist_albums_ids(
+fn get_artist_albums(
     spotify: &Spotify,
     artists_and_ids: HashMap<String, String>,
 ) -> Vec<Artist> {
