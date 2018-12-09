@@ -3,8 +3,8 @@ extern crate rspotify;
 
 mod user;
 
-use user::get_followed_artists;
+use user::draw_an_album_to_list;
 
 fn main() {
-    get_followed_artists();
+    draw_an_album_to_list();
 }

@@ -1,9 +1,10 @@
 mod artist;
 mod authentication;
+mod profile;
 
+use user::profile::followed_artists;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use rspotify::spotify::client::Spotify;
 use std::collections::HashMap;
 use user::artist::{Artist};
 use user::authentication::get_spotify;
@@ -12,41 +13,17 @@ use user::authentication::get_spotify;
 // create unit tests that mocks the calls and integration tests from outside the library that put everything
 // together
 
-pub fn get_followed_artists() {
+pub fn draw_an_album_to_list() {
     let spotify = get_spotify();
-    let artists_and_ids = get_all_followed_artists(&spotify);
+    let artists_and_ids = followed_artists(&spotify);
     let artist = randomize_artist(&artists_and_ids);
-    let randomized_album = artist.randomize_album(&spotify);
+    let randomized_album = artist.draw_an_album(&spotify);
 
     println!(
         "You are going to listen to {} from {}",
         randomized_album.name, artist.name
     );
     println!("Here's the url: {}", randomized_album.url);
-}
-
-fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
-    let mut next_request = None;
-    let mut artists_and_ids = HashMap::new();
-
-    loop {
-        let response = spotify.current_user_followed_artists(50, next_request);
-        let artists = response.ok().unwrap().artists;
-
-        for artist in artists.items {
-            artists_and_ids.insert(artist.name, artist.id);
-        }
-
-        next_request = artists.cursors.after;
-        if next_request.is_none() {
-            break;
-        } else {
-            // TODO: use log info
-            //            println!("Doing next request: {:?}", next_request);
-        }
-    }
-
-    artists_and_ids
 }
 
 fn randomize_artist(artists_and_ids: &HashMap<String, String>) -> Artist {

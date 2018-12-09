@@ -16,7 +16,7 @@ pub struct Album {
 }
 
 impl Artist {
-    pub fn randomize_album(&self, spotify: &Spotify) -> Album {
+    pub fn draw_an_album(&self, spotify: &Spotify) -> Album {
         let response = spotify.artist_albums(&self.id, Some(AlbumType::Album), None, Some(50), None);
         let albums = response.ok().unwrap().items;
 
