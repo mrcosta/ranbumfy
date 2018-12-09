@@ -9,18 +9,19 @@ use std::collections::HashMap;
 use user::artist::{Album, Artist};
 use user::authentication::get_spotify;
 
+// TODO: create artist and user traits and export the functions to there
+// create unit tests that mocks the calls and integration tests from outside the library that put everything
+// together
+
 pub fn get_followed_artists() {
     let spotify = get_spotify();
     let artists_and_ids = get_all_followed_artists(&spotify);
-    let artists_names = artists_and_ids.keys().cloned().collect::<Vec<String>>();
-
-    let randomized_artist_name = artists_names.choose(&mut thread_rng()).unwrap();
-    let artist_id = &artists_and_ids[randomized_artist_name];
-    let randomized_album = get_randomized_album(&spotify, &artist_id);
+    let artist = randomize_artist(artists_and_ids);
+    let randomized_album = get_randomized_album(&spotify, &artist.id);
 
     println!(
         "You are going to listen to {} from {}",
-        randomized_album.name, randomized_artist_name
+        randomized_album.name, artist.name
     );
     println!("Here's the url: {}", randomized_album.url);
 }
@@ -47,6 +48,17 @@ fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
     }
 
     artists_and_ids
+}
+
+fn randomize_artist(artists_and_ids: HashMap<String, String>) -> Artist {
+    let artists_names = artists_and_ids.keys().cloned().collect::<Vec<String>>();
+    let randomized_artist_name = artists_names.choose(&mut thread_rng()).unwrap().to_owned();
+    let randomized_artist_id = &artists_and_ids[&randomized_artist_name];
+
+    Artist {
+        name: randomized_artist_name,
+        id: randomized_artist_id.to_string()
+    }
 }
 
 fn get_randomized_album(spotify: &Spotify, id: &str) -> Album {
