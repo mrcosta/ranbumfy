@@ -4,9 +4,8 @@ mod authentication;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use rspotify::spotify::client::Spotify;
-use rspotify::spotify::senum::AlbumType;
 use std::collections::HashMap;
-use user::artist::{Album, Artist};
+use user::artist::{Artist};
 use user::authentication::get_spotify;
 
 // TODO: create artist and user traits and export the functions to there
@@ -16,8 +15,8 @@ use user::authentication::get_spotify;
 pub fn get_followed_artists() {
     let spotify = get_spotify();
     let artists_and_ids = get_all_followed_artists(&spotify);
-    let artist = randomize_artist(artists_and_ids);
-    let randomized_album = get_randomized_album(&spotify, &artist.id);
+    let artist = randomize_artist(&artists_and_ids);
+    let randomized_album = artist.randomize_album(&spotify);
 
     println!(
         "You are going to listen to {} from {}",
@@ -50,7 +49,7 @@ fn get_all_followed_artists(spotify: &Spotify) -> HashMap<String, String> {
     artists_and_ids
 }
 
-fn randomize_artist(artists_and_ids: HashMap<String, String>) -> Artist {
+fn randomize_artist(artists_and_ids: &HashMap<String, String>) -> Artist {
     let artists_names = artists_and_ids.keys().cloned().collect::<Vec<String>>();
     let randomized_artist_name = artists_names.choose(&mut thread_rng()).unwrap().to_owned();
     let randomized_artist_id = &artists_and_ids[&randomized_artist_name];
@@ -58,22 +57,6 @@ fn randomize_artist(artists_and_ids: HashMap<String, String>) -> Artist {
     Artist {
         name: randomized_artist_name,
         id: randomized_artist_id.to_string()
-    }
-}
-
-fn get_randomized_album(spotify: &Spotify, id: &str) -> Album {
-    let response = spotify.artist_albums(&id, Some(AlbumType::Album), None, Some(50), None);
-    let albums = response.ok().unwrap().items;
-
-    let randomized_album_from_response = albums.choose(&mut thread_rng()).unwrap();
-    let name = &randomized_album_from_response.name;
-    let id = &randomized_album_from_response.id;
-    let url = &randomized_album_from_response.external_urls["spotify"];
-
-    Album {
-        name: name.to_string(),
-        id: id.to_string(),
-        url: url.to_string(),
     }
 }
 
