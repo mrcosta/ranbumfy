@@ -5,7 +5,7 @@ use rspotify::spotify::senum::AlbumType;
 
 pub struct Artist {
     pub name: String,
-    pub id: String
+    pub id: String,
 }
 
 #[derive(Debug)]
@@ -17,7 +17,8 @@ pub struct Album {
 
 impl Artist {
     pub fn draw_an_album(&self, spotify: &Spotify) -> Album {
-        let response = spotify.artist_albums(&self.id, Some(AlbumType::Album), None, Some(50), None);
+        let response =
+            spotify.artist_albums(&self.id, Some(AlbumType::Album), None, Some(50), None);
         let albums = response.ok().unwrap().items;
 
         let randomized_album_from_response = albums.choose(&mut thread_rng()).unwrap();

@@ -2,12 +2,12 @@ mod artist;
 mod authentication;
 mod profile;
 
-use user::profile::followed_artists;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::collections::HashMap;
-use user::artist::{Artist};
+use user::artist::Artist;
 use user::authentication::get_spotify;
+use user::profile::followed_artists;
 
 // TODO: create artist and user traits and export the functions to there
 // create unit tests that mocks the calls and integration tests from outside the library that put everything
@@ -33,7 +33,7 @@ fn randomize_artist(artists_and_ids: &HashMap<String, String>) -> Artist {
 
     Artist {
         name: randomized_artist_name,
-        id: randomized_artist_id.to_string()
+        id: randomized_artist_id.to_string(),
     }
 }
 
