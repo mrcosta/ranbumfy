@@ -50,3 +50,4 @@ mod tests {
 // hashmap of string or &str given the context of doing requests that returns String??
 // when mod stand alone or create a trait??
 // how piramid tests works? would I unit test from each single module and integration test from the mod.rs??
+// https://developer.spotify.com/documentation/web-api/quick-start/
