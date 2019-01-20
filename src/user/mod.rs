@@ -1,4 +1,4 @@
-mod artist;
+pub mod artist;
 mod authentication;
 mod profile;
 
@@ -8,15 +8,17 @@ use std::collections::HashMap;
 use user::artist::Artist;
 use user::authentication::get_spotify;
 use user::profile::followed_artists;
+use music_service::MusicClient;
 
 // TODO: create artist and user traits and export the functions to there
 // create unit tests that mocks the calls and integration tests from outside the library that put everything
 // together
 
-pub fn draw_an_album_to_list() {
+pub fn draw_an_album_to_list(music_client: &MusicClient) {
     let spotify = get_spotify();
     let artists_and_ids = followed_artists(&spotify);
     let artist = randomize_artist(&artists_and_ids);
+//    music_client.artist_albums(&artist.id); TODO: substitute artist to use music_client instead of spotify
     let randomized_album = artist.draw_an_album(&spotify);
 
     println!(
