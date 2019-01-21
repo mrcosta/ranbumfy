@@ -1,7 +1,6 @@
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use rspotify::spotify::client::Spotify;
-use rspotify::spotify::senum::AlbumType;
+use music_service::MusicClient;
 
 pub struct Artist {
     pub name: String,
@@ -16,20 +15,16 @@ pub struct Album {
 }
 
 impl Artist {
-    pub fn draw_an_album(&self, spotify: &Spotify) -> Album {
-        let response =
-            spotify.artist_albums(&self.id, Some(AlbumType::Album), None, Some(50), None);
-        let albums = response.ok().unwrap().items;
+    pub fn draw_an_album(&self, music_client: &MusicClient) -> Album {
+        let albums = music_client.artist_albums(&self.id);
 
-        let randomized_album_from_response = albums.choose(&mut thread_rng()).unwrap();
-        let name = &randomized_album_from_response.name;
-        let id = &randomized_album_from_response.id;
-        let url = &randomized_album_from_response.external_urls["spotify"];
+        // TODO: how can I just randomized the album and return without creating a new album
+        let randomized_album = albums.choose(&mut thread_rng()).unwrap();
 
         Album {
-            name: name.to_string(),
-            id: id.to_string(),
-            url: url.to_string(),
+            name: randomized_album.name.to_string(),
+            id: randomized_album.id.to_string(),
+            url: randomized_album.url.to_string(),
         }
     }
 }

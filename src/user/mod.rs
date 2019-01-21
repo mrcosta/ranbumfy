@@ -18,8 +18,7 @@ pub fn draw_an_album_to_list(music_client: &MusicClient) {
     let spotify = get_spotify();
     let artists_and_ids = followed_artists(&spotify);
     let artist = randomize_artist(&artists_and_ids);
-//    music_client.artist_albums(&artist.id); TODO: substitute artist to use music_client instead of spotify
-    let randomized_album = artist.draw_an_album(&spotify);
+    let randomized_album = artist.draw_an_album(music_client);
 
     println!(
         "You are going to listen to {} from {}",
