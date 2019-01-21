@@ -1,12 +1,12 @@
 extern crate rand;
 extern crate rspotify;
 
-mod user;
-mod spotify;
 mod music_service;
+mod spotify;
+mod user;
 
-use user::draw_an_album_to_list;
 use spotify::SpotifyClient;
+use user::draw_an_album_to_list;
 
 fn main() {
     let spotify_client = SpotifyClient {};

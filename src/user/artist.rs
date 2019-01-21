@@ -1,6 +1,6 @@
+use music_service::MusicClient;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use music_service::MusicClient;
 
 pub struct Artist {
     pub name: String,

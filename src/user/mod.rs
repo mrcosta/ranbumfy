@@ -2,13 +2,13 @@ pub mod artist;
 mod authentication;
 mod profile;
 
+use music_service::MusicClient;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::collections::HashMap;
 use user::artist::Artist;
 use user::authentication::get_spotify;
 use user::profile::followed_artists;
-use music_service::MusicClient;
 
 // TODO: create artist and user traits and export the functions to there
 // create unit tests that mocks the calls and integration tests from outside the library that put everything
