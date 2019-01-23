@@ -1,3 +1,5 @@
+#![feature(custom_attribute)]
+
 mod music_service;
 mod spotify_music_service;
 mod user;

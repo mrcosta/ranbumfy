@@ -28,3 +28,30 @@ impl Artist {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+
+    use super::*;
+    use mockers::Scenario;
+
+    #[test]
+    fn test_drawn_an_album_when_artist_has_only_one_album() {
+        let scenario = Scenario::new();
+        let mut cond = scenario.create_mock_for::<MusicClient>();
+
+        let album = Album {
+            name: "black holes and revelations".to_string(),
+            id: "black_holes_123".to_string(),
+            url: "https://some_url".to_string()
+        };
+        scenario.expect(cond.artist_albums_call("muse_123_id").and_return(vec![album]));
+
+        let artist = Artist {
+            name: "muse".to_string(),
+            id: "muse_123_id".to_string(),
+        };
+
+        assert_eq!(artist.draw_an_album(&mut cond).name, "black holes and revelations");
+    }
+}
