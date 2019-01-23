@@ -1,8 +1,8 @@
 mod music_service;
-mod spotify;
+mod spotify_music_service;
 mod user;
 
-use spotify::SpotifyClient;
+use spotify_music_service::SpotifyClient;
 use user::draw_an_album_to_list;
 
 fn main() {

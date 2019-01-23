@@ -1,7 +1,7 @@
 mod authentication;
 
 use crate::music_service::MusicClient;
-use crate::spotify::authentication::get_spotify_client;
+use crate::spotify_music_service::authentication::get_spotify_client;
 use crate::user::artist::Album;
 use rspotify::spotify::senum::AlbumType;
 
