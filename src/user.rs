@@ -3,12 +3,12 @@ mod authentication;
 mod profile;
 
 use crate::music_service::MusicClient;
-use rand::seq::SliceRandom;
-use rand::thread_rng;
-use std::collections::HashMap;
 use crate::user::artist::Artist;
 use crate::user::authentication::get_spotify;
 use crate::user::profile::followed_artists;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
+use std::collections::HashMap;
 
 // TODO: create artist and user traits and export the functions to there
 // create unit tests that mocks the calls and integration tests from outside the library that put everything
