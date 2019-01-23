@@ -1,9 +1,9 @@
 mod authentication;
 
-use music_service::MusicClient;
+use crate::music_service::MusicClient;
+use crate::spotify::authentication::get_spotify_client;
+use crate::user::artist::Album;
 use rspotify::spotify::senum::AlbumType;
-use spotify::authentication::get_spotify_client;
-use user::artist::Album;
 
 pub struct SpotifyClient {}
 

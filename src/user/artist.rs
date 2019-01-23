@@ -1,4 +1,4 @@
-use music_service::MusicClient;
+use crate::music_service::MusicClient;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 

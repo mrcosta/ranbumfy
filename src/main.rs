@@ -1,6 +1,3 @@
-extern crate rand;
-extern crate rspotify;
-
 mod music_service;
 mod spotify;
 mod user;

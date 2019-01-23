@@ -2,13 +2,13 @@ pub mod artist;
 mod authentication;
 mod profile;
 
-use music_service::MusicClient;
+use crate::music_service::MusicClient;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::collections::HashMap;
-use user::artist::Artist;
-use user::authentication::get_spotify;
-use user::profile::followed_artists;
+use crate::user::artist::Artist;
+use crate::user::authentication::get_spotify;
+use crate::user::profile::followed_artists;
 
 // TODO: create artist and user traits and export the functions to there
 // create unit tests that mocks the calls and integration tests from outside the library that put everything
@@ -50,5 +50,5 @@ mod tests {
 // questions:
 // hashmap of string or &str given the context of doing requests that returns String??
 // when mod stand alone or create a trait??
-// how piramid tests works? would I unit test from each single module and integration test from the mod.rs??
+// how piramid tests works? would I unit test from each single module and integration test from the music_service.rs??
 // https://developer.spotify.com/documentation/web-api/quick-start/

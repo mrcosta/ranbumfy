@@ -1,4 +1,4 @@
-use user::artist::Album;
+use crate::user::artist::Album;
 
 pub trait MusicClient {
     fn artist_albums(&self, id: &str) -> Vec<Album>;
