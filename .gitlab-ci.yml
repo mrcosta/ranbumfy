@@ -22,18 +22,18 @@ cache:
 #  - export PATH="/root/.cargo/bin:$PATH"
 
 # The following test: stages inherit from the test template above and
-test:stable:
-  image: "rustdocker/rust:stable"
-  <<: *cargo_test
+#test:stable:
+#  image: "rustdocker/rust:stable"
+#  <<: *cargo_test
 
 # test:beta:
 #  image: "rustdocker/rust:beta"
 #  <<: *cargo_test
 
-# test:nightly:
-# image: "rustdocker/rust:nightly"
-#  allow_failure: true
-#  <<: *cargo_test
+test:nightly:
+  image: "rustdocker/rust:nightly"
+  allow_failure: true
+  <<: *cargo_test
 
 # lint:rustfmt:
 #  image: "guangie88/rustfmt-clippy"
@@ -45,4 +45,4 @@ lint:clippy:
   image: "guangie88/rustfmt-clippy"
   allow_failure: true
   script:
-    - cargo clippy -- -D warnings # Turn all warnings into errors
+    - cargo clippy # Turn all warnings into errors
