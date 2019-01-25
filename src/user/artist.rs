@@ -1,6 +1,6 @@
 use crate::music_service::MusicClient;
-use rand::seq::SliceRandom;
 use rand::thread_rng;
+use rand::Rng;
 
 pub struct Artist {
     pub name: String,
@@ -16,16 +16,10 @@ pub struct Album {
 
 impl Artist {
     pub fn draw_an_album(&self, music_client: &MusicClient) -> Album {
-        let albums = music_client.artist_albums(&self.id);
+        let mut albums = music_client.artist_albums(&self.id);
 
-        // TODO: how can I just randomized the album and return without creating a new album
-        let randomized_album = albums.choose(&mut thread_rng()).unwrap();
-
-        Album {
-            name: randomized_album.name.to_string(),
-            id: randomized_album.id.to_string(),
-            url: randomized_album.url.to_string(),
-        }
+        let randomized_album_index = thread_rng().gen_range(0, albums.len());
+        albums.swap_remove(randomized_album_index)
     }
 }
 
@@ -43,15 +37,21 @@ mod test {
         let album = Album {
             name: "black holes and revelations".to_string(),
             id: "black_holes_123".to_string(),
-            url: "https://some_url".to_string()
+            url: "https://some_url".to_string(),
         };
-        scenario.expect(cond.artist_albums_call("muse_123_id").and_return(vec![album]));
+        scenario.expect(
+            cond.artist_albums_call("muse_123_id")
+                .and_return(vec![album]),
+        );
 
         let artist = Artist {
             name: "muse".to_string(),
             id: "muse_123_id".to_string(),
         };
 
-        assert_eq!(artist.draw_an_album(&mut cond).name, "black holes and revelations");
+        assert_eq!(
+            artist.draw_an_album(&mut cond).name,
+            "black holes and revelations"
+        );
     }
 }
