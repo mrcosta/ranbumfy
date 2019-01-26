@@ -1,10 +1,8 @@
 pub mod artist;
-mod authentication;
 mod profile;
 
 use crate::music_service::MusicClient;
 use crate::user::artist::Artist;
-use crate::user::authentication::get_spotify;
 use crate::user::profile::followed_artists;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
@@ -15,8 +13,7 @@ use std::collections::HashMap;
 // together
 
 pub fn draw_an_album_to_list(music_client: &MusicClient) {
-    let spotify = get_spotify();
-    let artists_and_ids = followed_artists(&spotify);
+    let artists_and_ids = followed_artists(music_client);
     let artist = randomize_artist(&artists_and_ids);
     let randomized_album = artist.draw_an_album(music_client);
 
