@@ -1,18 +1,18 @@
-mod authentication;
+pub mod authentication;
 
 use crate::music_service::MusicClient;
-use crate::spotify_music_service::authentication::get_spotify_client;
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
+use rspotify::spotify::client::Spotify;
 use rspotify::spotify::senum::AlbumType;
 
-pub struct SpotifyClient {}
+pub struct SpotifyClient {
+    pub client: Spotify,
+}
 
 impl MusicClient for SpotifyClient {
     fn artist_albums(&self, id: &str) -> Vec<Album> {
-        let client = get_spotify_client();
-
-        let response = client.artist_albums(id, Some(AlbumType::Album), None, Some(50), None);
+        let response = self.client.artist_albums(id, Some(AlbumType::Album), None, Some(50), None);
         let albums = response.ok().unwrap().items; // TODO, check if response is different than ok
 
         albums
@@ -30,14 +30,14 @@ impl MusicClient for SpotifyClient {
     }
 
     fn user_followed_artists(&self) -> Vec<Artist> {
-        let client = get_spotify_client();
         let mut next_request = None;
         let mut artists_and_ids = Vec::new();
 
         loop {
-            let response = client.current_user_followed_artists(50, next_request);
+            let response = self.client.current_user_followed_artists(50, next_request);
             let artists = response.ok().unwrap().artists;
 
+            // TODO: extract to private function
             artists
                 .items
                 .into_iter()
