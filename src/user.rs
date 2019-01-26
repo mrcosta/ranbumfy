@@ -11,6 +11,10 @@ pub fn draw_an_album_to_list(music_client: &MusicClient) {
     let artists = followed_artists(music_client);
     let randomized_artist = randomize_artist(artists);
     let randomized_album = randomized_artist.draw_an_album(music_client);
+    // TODO: create profile object and pass music client for it
+    // profile.followed_artists() should be the api
+    // artist_service that receive the music_client instead of the entity artist itself
+    // it makes more sense, since its can be tricky to main an entity with this kind of dependency
 
     println!(
         "You are going to listen to {} from {}",
@@ -32,5 +36,3 @@ mod tests {
         assert_eq!("zero", "zero");
     }
 }
-
-// TODO: create artist and user traits and export the functions to there
