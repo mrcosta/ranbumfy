@@ -4,6 +4,7 @@ use crate::music_service::MusicClient;
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
 use rspotify::spotify::client::Spotify;
+use rspotify::spotify::model::artist::FullArtist;
 use rspotify::spotify::senum::AlbumType;
 
 pub struct SpotifyClient {
@@ -31,24 +32,13 @@ impl MusicClient for SpotifyClient {
 
     fn user_followed_artists(&self) -> Vec<Artist> {
         let mut next_request = None;
-        let mut artists_and_ids = Vec::new();
+        let mut followed_artists = Vec::new();
 
         loop {
             let response = self.client.current_user_followed_artists(50, next_request);
             let artists = response.ok().unwrap().artists;
 
-            // TODO: extract to private function
-            artists
-                .items
-                .into_iter()
-                .for_each(|artist| {
-                    artists_and_ids.push(
-                        Artist {
-                            name: artist.name,
-                            id: artist.id,
-                        }
-                    );
-                });
+            fill_followed_artists(artists.items, &mut followed_artists);
 
             next_request = artists.cursors.after;
             if next_request.is_none() {
@@ -59,6 +49,19 @@ impl MusicClient for SpotifyClient {
             }
         }
 
-        artists_and_ids
+        followed_artists
     }
+}
+
+fn fill_followed_artists(artists: Vec<FullArtist>, followed_artists: &mut Vec<Artist>) {
+    artists
+        .into_iter()
+        .for_each(|artist| {
+            followed_artists.push(
+                Artist {
+                    name: artist.name,
+                    id: artist.id,
+                }
+            );
+        });
 }
