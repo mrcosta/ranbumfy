@@ -2,10 +2,10 @@
 use mockers_derive::mocked;
 
 use crate::user::artist::Album;
-use std::collections::HashMap;
+use crate::user::artist::Artist;
 
 #[mocked]
 pub trait MusicClient {
     fn artist_albums(&self, id: &str) -> Vec<Album>;
-    fn user_followed_artists(&self) -> HashMap<String, String>;
+    fn user_followed_artists(&self) -> Vec<Artist>;
 }

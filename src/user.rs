@@ -4,35 +4,24 @@ mod profile;
 use crate::music_service::MusicClient;
 use crate::user::artist::Artist;
 use crate::user::profile::followed_artists;
-use rand::seq::SliceRandom;
 use rand::thread_rng;
-use std::collections::HashMap;
-
-// TODO: create artist and user traits and export the functions to there
-// create unit tests that mocks the calls and integration tests from outside the library that put everything
-// together
+use rand::Rng;
 
 pub fn draw_an_album_to_list(music_client: &MusicClient) {
-    let artists_and_ids = followed_artists(music_client);
-    let artist = randomize_artist(&artists_and_ids);
-    let randomized_album = artist.draw_an_album(music_client);
+    let artists = followed_artists(music_client);
+    let randomized_artist = randomize_artist(artists);
+    let randomized_album = randomized_artist.draw_an_album(music_client);
 
     println!(
         "You are going to listen to {} from {}",
-        randomized_album.name, artist.name
+        randomized_album.name, randomized_artist.name
     );
     println!("Here's the url: {}", randomized_album.url);
 }
 
-fn randomize_artist(artists_and_ids: &HashMap<String, String>) -> Artist {
-    let artists_names = artists_and_ids.keys().cloned().collect::<Vec<String>>();
-    let randomized_artist_name = artists_names.choose(&mut thread_rng()).unwrap().to_owned();
-    let randomized_artist_id = &artists_and_ids[&randomized_artist_name];
-
-    Artist {
-        name: randomized_artist_name,
-        id: randomized_artist_id.to_string(),
-    }
+fn randomize_artist(mut artists: Vec<Artist>) -> Artist {
+    let randomized_artist_index = thread_rng().gen_range(0, artists.len());
+    artists.swap_remove(randomized_artist_index)
 }
 
 #[cfg(test)]
@@ -44,8 +33,4 @@ mod tests {
     }
 }
 
-// questions:
-// hashmap of string or &str given the context of doing requests that returns String??
-// when mod stand alone or create a trait??
-// how piramid tests works? would I unit test from each single module and integration test from the music_service.rs??
-// https://developer.spotify.com/documentation/web-api/quick-start/
+// TODO: create artist and user traits and export the functions to there
