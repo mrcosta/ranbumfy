@@ -9,6 +9,8 @@ rspotify = "0.2.1"
 rand = "0.6.1"
 assert_cli = "0.6.3"
 mockers_derive = "0.13.0"
+log = "0.4"
+env_logger = "0.6.0"
 
 [dev-dependencies]
 mockers = "0.13.0"

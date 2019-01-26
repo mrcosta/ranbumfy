@@ -3,6 +3,7 @@ pub mod authentication;
 use crate::music_service::MusicClient;
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
+use log::{info};
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::model::artist::FullArtist;
 use rspotify::spotify::senum::AlbumType;
@@ -44,8 +45,7 @@ impl MusicClient for SpotifyClient {
             if next_request.is_none() {
                 break;
             } else {
-                // TODO: use log info
-                //            println!("Doing next request: {:?}", next_request);
+                info!("Doing next request: {:?}", &next_request);
             }
         }
 
