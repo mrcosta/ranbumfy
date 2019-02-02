@@ -17,10 +17,9 @@ pub fn draw_an_album_to_list(music_client: &MusicClient) {
     // it makes more sense, since its can be tricky to main an entity with this kind of dependency
 
     println!(
-        "You are going to listen to {} from {}",
-        randomized_album.name, randomized_artist.name
+        "Listen to {} from {}: {}",
+        randomized_album.name, randomized_artist.name, randomized_album.url
     );
-    println!("Here's the url: {}", randomized_album.url);
 }
 
 fn randomize_artist(mut artists: Vec<Artist>) -> Artist {
