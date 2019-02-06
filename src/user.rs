@@ -1,14 +1,12 @@
 pub mod artist;
-mod profile;
 
 use crate::music_service::MusicClient;
 use crate::user::artist::Artist;
-use crate::user::profile::followed_artists;
 use rand::thread_rng;
 use rand::Rng;
 
 pub fn draw_an_album_to_list(music_client: &MusicClient) {
-    let artists = followed_artists(music_client);
+    let artists = music_client.user_followed_artists();
 
     for _ in 0..7 {
         let randomized_artist = randomize_artist(&artists);
