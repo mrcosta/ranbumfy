@@ -15,7 +15,7 @@ pub struct SpotifyClient {
 impl MusicClient for SpotifyClient {
     fn artist_albums(&self, id: &str) -> Vec<Album> {
         let response = self.client.artist_albums(id, Some(AlbumType::Album), None, Some(50), None);
-        let albums = response.ok().expect("didn't return expected response").items;
+        let albums = response.expect("didn't return expected response").items;
 
         albums
             .into_iter()

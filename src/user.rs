@@ -12,7 +12,9 @@ pub fn draw_an_album_to_list(music_client: &MusicClient) {
 
     for _ in 0..7 {
         let randomized_artist = randomize_artist(&artists);
-        let randomized_album = randomized_artist.draw_an_album(music_client);
+
+        let albums = music_client.artist_albums(&randomized_artist.id);
+        let randomized_album = randomized_artist.draw_an_album(albums);
         println!(
             "Listen to {} from {}: {}",
             randomized_album.name, randomized_artist.name, randomized_album.url
@@ -20,9 +22,9 @@ pub fn draw_an_album_to_list(music_client: &MusicClient) {
     }
 }
 
-fn randomize_artist(artists: &Vec<Artist>) -> Artist {
+fn randomize_artist(artists: &[Artist]) -> Artist {
     let randomized_artist_index = thread_rng().gen_range(0, artists.len());
-    let artist = artists.get(randomized_artist_index).unwrap();
+    let artist = &artists[randomized_artist_index];
 
     Artist {
         id: artist.id.to_owned(),
