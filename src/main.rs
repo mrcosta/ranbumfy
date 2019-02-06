@@ -17,6 +17,9 @@ fn main() {
         client: get_spotify_client(),
     };
 
+    // draw 7 albums at once
+    // get followed artists that release album in 2019 and it's events
+    // implement display for artists
     loop {
         draw_an_album_to_list(&spotify_client);
 
