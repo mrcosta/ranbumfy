@@ -5,18 +5,25 @@ use crate::user::artist::Artist;
 use rand::thread_rng;
 use rand::Rng;
 
-pub fn draw_an_album_to_list(music_client: &MusicClient) {
-    let artists = music_client.user_followed_artists();
+pub struct UserService<'a> {
+    pub music_client: &'a MusicClient,
+}
 
-    for _ in 0..7 {
-        let randomized_artist = randomize_artist(&artists);
+impl<'a> UserService<'a> {
 
-        let albums = music_client.artist_albums(&randomized_artist.id);
-        let randomized_album = randomized_artist.draw_an_album(albums);
-        println!(
-            "Listen to {} from {}: {}",
-            randomized_album.name, randomized_artist.name, randomized_album.url
-        );
+    pub fn draw_an_album_to_list(&self) {
+        let artists = self.music_client.user_followed_artists();
+
+        for _ in 0..7 {
+            let randomized_artist = randomize_artist(&artists);
+
+            let albums = self.music_client.artist_albums(&randomized_artist.id);
+            let randomized_album = randomized_artist.draw_an_album(albums);
+            println!(
+                "Listen to {} from {}: {}",
+                randomized_album.name, randomized_artist.name, randomized_album.url
+            );
+        }
     }
 }
 

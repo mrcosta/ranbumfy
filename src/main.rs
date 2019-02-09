@@ -8,7 +8,7 @@ use env_logger;
 use std::io;
 use spotify_music_service::SpotifyClient;
 use spotify_music_service::authentication::get_spotify_client;
-use user::draw_an_album_to_list;
+use user::UserService;
 
 fn main() {
     env_logger::init();
@@ -17,11 +17,15 @@ fn main() {
         client: get_spotify_client(),
     };
 
-    // draw 7 albums at once
+    let user_service = UserService {
+        music_client: &spotify_client
+    };
+
+    // TODO: draw an recent artist to listen
     // get followed artists that release album in 2019 and it's events
     // implement display for artists
     loop {
-        draw_an_album_to_list(&spotify_client);
+        user_service.draw_an_album_to_list();
 
         println!("Please press any key to draw one more round or `q` to exit");
 
