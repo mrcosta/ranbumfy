@@ -25,7 +25,7 @@ fn main() {
     // get followed artists that release album in 2019 and it's events
     // implement display for artists
     loop {
-        user_service.draw_an_album_to_list();
+        user_service.draw_albums_to_list();
 
         println!("Please press any key to draw one more round or `q` to exit");
 

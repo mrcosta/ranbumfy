@@ -11,7 +11,7 @@ pub struct UserService<'a> {
 
 impl<'a> UserService<'a> {
 
-    pub fn draw_an_album_to_list(&self) {
+    pub fn draw_albums_to_list(&self) {
         let artists = self.music_client.user_followed_artists();
 
         for _ in 0..7 {
