@@ -22,6 +22,7 @@ fn main() {
     };
 
     // TODO: draw an recent artist to listen
+    // TODO: draw a recent followed artist to listen to
     // get followed artists that release album in 2019 and it's events
     // implement display for artists
     loop {

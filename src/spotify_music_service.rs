@@ -1,5 +1,7 @@
 pub mod authentication;
+mod converter;
 
+use crate::spotify_music_service::converter::to_albums;
 use crate::music_service::MusicClient;
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
@@ -15,20 +17,9 @@ pub struct SpotifyClient {
 impl MusicClient for SpotifyClient {
     fn artist_albums(&self, id: &str) -> Vec<Album> {
         let response = self.client.artist_albums(id, Some(AlbumType::Album), None, Some(50), None);
-        let albums = response.expect("didn't return expected response").items;
+        let spotify_albums = response.expect("didn't return expected response").items;
 
-        albums
-            .into_iter()
-            .map(|album| {
-                let url = &album.external_urls["spotify"];
-
-                Album {
-                    name: album.name,
-                    id: album.id,
-                    url: url.to_string(),
-                }
-            })
-            .collect::<Vec<Album>>()
+        to_albums(spotify_albums)
     }
 
     fn user_followed_artists(&self) -> Vec<Artist> {
