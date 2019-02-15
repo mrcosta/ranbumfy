@@ -1,8 +1,8 @@
 pub mod artist;
 
 use crate::music_service::MusicClient;
-use crate::user::artist::Artist;
 use crate::user::artist::Album;
+use crate::user::artist::Artist;
 use rand::thread_rng;
 use rand::Rng;
 
@@ -11,7 +11,6 @@ pub struct UserService<'a> {
 }
 
 impl<'a> UserService<'a> {
-
     pub fn draw_albums_to_list(&self) -> Vec<Album> {
         let artists = self.music_client.user_followed_artists();
         let mut drawn_albums = Vec::new();
@@ -58,10 +57,7 @@ mod test {
             name: "muse".to_string(),
             id: "muse_123_id".to_string(),
         };
-        scenario.expect(
-            cond.user_followed_artists_call()
-                .and_return(vec![artist])
-        );
+        scenario.expect(cond.user_followed_artists_call().and_return(vec![artist]));
 
         let album = Album {
             name: "black holes and revelations".to_string(),
@@ -70,7 +66,8 @@ mod test {
         };
         scenario.expect(
             cond.artist_albums_call("muse_123_id")
-                .and_return_clone(vec![album]).times(7)
+                .and_return_clone(vec![album])
+                .times(7),
         );
 
         let user_service = UserService {

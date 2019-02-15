@@ -5,9 +5,9 @@ mod spotify_music_service;
 mod user;
 
 use env_logger;
-use std::io;
-use spotify_music_service::SpotifyClient;
 use spotify_music_service::authentication::get_spotify_client;
+use spotify_music_service::SpotifyClient;
+use std::io;
 use user::UserService;
 
 fn main() {
@@ -18,7 +18,7 @@ fn main() {
     };
 
     let user_service = UserService {
-        music_client: &spotify_client
+        music_client: &spotify_client,
     };
 
     // TODO: draw an recent artist to listen

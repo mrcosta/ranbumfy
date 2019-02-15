@@ -1,11 +1,11 @@
 pub mod authentication;
 mod converter;
 
-use crate::spotify_music_service::converter::to_albums;
 use crate::music_service::MusicClient;
+use crate::spotify_music_service::converter::to_albums;
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
-use log::{info};
+use log::info;
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::model::artist::FullArtist;
 use rspotify::spotify::senum::AlbumType;
@@ -16,7 +16,9 @@ pub struct SpotifyClient {
 
 impl MusicClient for SpotifyClient {
     fn artist_albums(&self, id: &str) -> Vec<Album> {
-        let response = self.client.artist_albums(id, Some(AlbumType::Album), None, Some(50), None);
+        let response = self
+            .client
+            .artist_albums(id, Some(AlbumType::Album), None, Some(50), None);
         let spotify_albums = response.expect("didn't return expected response").items;
 
         to_albums(spotify_albums)
@@ -45,14 +47,10 @@ impl MusicClient for SpotifyClient {
 }
 
 fn fill_followed_artists(artists: Vec<FullArtist>, followed_artists: &mut Vec<Artist>) {
-    artists
-        .into_iter()
-        .for_each(|artist| {
-            followed_artists.push(
-                Artist {
-                    name: artist.name,
-                    id: artist.id,
-                }
-            );
+    artists.into_iter().for_each(|artist| {
+        followed_artists.push(Artist {
+            name: artist.name,
+            id: artist.id,
         });
+    });
 }
