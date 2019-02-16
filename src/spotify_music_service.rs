@@ -2,7 +2,7 @@ pub mod authentication;
 mod converter;
 
 use crate::music_service::MusicClient;
-use crate::spotify_music_service::converter::{to_albums, to_artists };
+use crate::spotify_music_service::converter::{to_albums, to_artists};
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
 use log::info;
@@ -47,9 +47,7 @@ impl MusicClient for SpotifyClient {
 }
 
 fn fill_followed_artists(artists: Vec<FullArtist>, followed_artists: &mut Vec<Artist>) {
-    to_artists(artists)
-        .into_iter()
-        .for_each(|artist| {
-            followed_artists.push(artist);
-        });
+    to_artists(artists).into_iter().for_each(|artist| {
+        followed_artists.push(artist);
+    });
 }

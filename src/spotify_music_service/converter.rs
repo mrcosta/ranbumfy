@@ -21,11 +21,9 @@ pub fn to_albums(spotify_albums: Vec<SimplifiedAlbum>) -> Vec<Album> {
 pub fn to_artists(spotify_artists: Vec<FullArtist>) -> Vec<Artist> {
     spotify_artists
         .into_iter()
-        .map(|spotify_artist| {
-            Artist {
-                name: spotify_artist.name,
-                id: spotify_artist.id,
-            }
+        .map(|spotify_artist| Artist {
+            name: spotify_artist.name,
+            id: spotify_artist.id,
         })
         .collect::<Vec<Artist>>()
 }
@@ -76,7 +74,7 @@ mod test {
             name: "muse".to_string(),
             popularity: 0,
             _type: Type::Artist,
-            uri: "".to_string()
+            uri: "".to_string(),
         };
 
         let expected_artist = Artist {
@@ -84,6 +82,9 @@ mod test {
             id: "muse_123_id".to_string(),
         };
 
-        assert_eq!(to_artists(vec![spotify_artist])[0].name, expected_artist.name);
+        assert_eq!(
+            to_artists(vec![spotify_artist])[0].name,
+            expected_artist.name
+        );
     }
 }
