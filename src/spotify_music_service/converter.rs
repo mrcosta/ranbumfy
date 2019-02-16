@@ -1,19 +1,33 @@
 use crate::user::artist::Album;
+use crate::user::artist::Artist;
 use rspotify::spotify::model::album::SimplifiedAlbum;
+use rspotify::spotify::model::artist::FullArtist;
 
 pub fn to_albums(spotify_albums: Vec<SimplifiedAlbum>) -> Vec<Album> {
     spotify_albums
         .into_iter()
-        .map(|album| {
-            let url = &album.external_urls["spotify"];
+        .map(|spotify_album| {
+            let url = &spotify_album.external_urls["spotify"];
 
             Album {
-                name: album.name,
-                id: album.id,
+                name: spotify_album.name,
+                id: spotify_album.id,
                 url: url.to_string(),
             }
         })
         .collect::<Vec<Album>>()
+}
+
+pub fn to_artists(spotify_artists: Vec<FullArtist>) -> Vec<Artist> {
+    spotify_artists
+        .into_iter()
+        .map(|spotify_artist| {
+            Artist {
+                name: spotify_artist.name,
+                id: spotify_artist.id,
+            }
+        })
+        .collect::<Vec<Artist>>()
 }
 
 #[cfg(test)]
@@ -21,9 +35,10 @@ mod test {
 
     use super::*;
     use rspotify::spotify::senum::Type;
+    use std::collections::HashMap;
 
     #[test]
-    fn convert_from_spotify_simplified_to_domain_albums() {
+    fn convert_from_spotify_albums_to_domain_albums() {
         let spotify_album = SimplifiedAlbum {
             artists: vec![],
             album_type: "".to_string(),
@@ -47,5 +62,28 @@ mod test {
         };
 
         assert_eq!(to_albums(vec![spotify_album])[0].name, expected_album.name);
+    }
+
+    #[test]
+    fn convert_from_spotify_artists_to_domain_artists() {
+        let spotify_artist = FullArtist {
+            external_urls: HashMap::new(),
+            followers: HashMap::new(),
+            genres: vec![],
+            href: "".to_string(),
+            id: "muse_123_id".to_string(),
+            images: vec![],
+            name: "muse".to_string(),
+            popularity: 0,
+            _type: Type::Artist,
+            uri: "".to_string()
+        };
+
+        let expected_artist = Artist {
+            name: "muse".to_string(),
+            id: "muse_123_id".to_string(),
+        };
+
+        assert_eq!(to_artists(vec![spotify_artist])[0].name, expected_artist.name);
     }
 }
