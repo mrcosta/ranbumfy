@@ -12,4 +12,7 @@ randomize `n` albums to be listen based in your followed artists
 # contributing
 
 * to run tests: `cargo test`
+* to run only integration tests: `cargo test --test integration`
+* to run only one test: `cargo test <TESTNAME>`
+* to run only unit tests: `cargo test --bin ranbumfy`
 * take a look in `.gitlab-ci.yml` to see which rust version is being supported
