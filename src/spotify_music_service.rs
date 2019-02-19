@@ -5,7 +5,6 @@ use crate::music_service::MusicClient;
 use crate::spotify_music_service::converter::{to_albums, to_artists};
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
-use log::info;
 use rspotify::spotify::client::Spotify;
 use rspotify::spotify::model::artist::FullArtist;
 use rspotify::spotify::senum::AlbumType;
@@ -37,8 +36,6 @@ impl MusicClient for SpotifyClient {
             next_request = artists.cursors.after;
             if next_request.is_none() {
                 break;
-            } else {
-                info!("Doing next request: {:?}", &next_request);
             }
         }
 
