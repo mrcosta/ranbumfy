@@ -6,7 +6,7 @@ pub struct Artist {
     pub id: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Album {
     pub name: String,
     pub id: String,
