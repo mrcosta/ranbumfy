@@ -21,5 +21,6 @@ fn main() {
     // TODO: draw a recent followed artist to listen to
     // get followed artists that release album in 2019 and it's events
     // implement display for artists
+    // create crate
     user_service.draw_albums_to_list();
 }
