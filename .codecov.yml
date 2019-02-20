@@ -1,2 +1,3 @@
 ignore:
   - "src/spotify_music_service.rs"
+  - "src/spotify_music_service/authentication.rs"

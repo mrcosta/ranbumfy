@@ -4,6 +4,7 @@ before_install:
   -in .spotify_token_cache.json.enc -out .spotify_token_cache.json -d
 - curl -L https://github.com/mozilla/grcov/releases/download/v0.4.1/grcov-linux-x86_64.tar.bz2
   | tar jxf -
+cache: cargo
 matrix:
   include:
   - os: linux
