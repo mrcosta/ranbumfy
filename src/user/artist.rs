@@ -39,9 +39,7 @@ mod test {
             id: "muse_123_id".to_string(),
         };
 
-        assert_eq!(
-            artist.draw_an_album(vec![album]).name,
-            "black holes and revelations"
-        );
+        let expected_name = artist.draw_an_album(vec![album]).name;
+        assert_eq!(expected_name, "black holes and revelations");
     }
 }
