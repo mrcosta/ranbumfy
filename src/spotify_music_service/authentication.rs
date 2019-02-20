@@ -17,8 +17,5 @@ pub fn get_spotify_client() -> Spotify {
 fn get_token_info() -> TokenInfo {
     let mut oauth = SpotifyOAuth::default().scope("user-follow-read").build();
 
-    match get_token(&mut oauth) {
-        Some(token_info) => token_info,
-        None => panic!("tretas"),
-    }
+    get_token(&mut oauth).unwrap()
 }
