@@ -6,11 +6,11 @@ use crate::user::artist::Artist;
 use rand::thread_rng;
 use rand::Rng;
 
-pub struct UserService<'a> {
-    pub music_client: &'a MusicClient,
+pub struct UserService {
+    pub music_client: Box<MusicClient>,
 }
 
-impl<'a> UserService<'a> {
+impl UserService {
     pub fn draw_albums_to_list(&self) -> Vec<Album> {
         let artists = self.music_client.user_followed_artists();
         let mut drawn_albums = Vec::new();
@@ -71,7 +71,7 @@ mod test {
         );
 
         let user_service = UserService {
-            music_client: &cond,
+            music_client: Box::new(cond),
         };
 
         let drawn_albums = user_service.draw_albums_to_list();
