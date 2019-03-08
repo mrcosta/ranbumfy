@@ -11,7 +11,6 @@ repository = "https://github.com/mrcosta/ranbumfy"
 keywords = ["cli", "spotify", "music"]
 categories = ["command-line-utilities"]
 
-
 [dependencies]
 rspotify = "0.2.1"
 rand = "0.6.1"
@@ -19,6 +18,7 @@ assert_cli = "0.6.3"
 mockers_derive = "0.13.0"
 log = "0.4"
 env_logger = "0.6.0"
+clap = "2.32"
 
 [dev-dependencies]
 mockers = "0.13.0"
