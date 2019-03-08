@@ -3,6 +3,14 @@ name = "ranbumfy"
 version = "0.1.0"
 authors = ["Mateus Costa <mateuscomp@gmail.com>"]
 edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "A tool to drawn albums from spotify"
+readme = "README.md"
+homepage = "https://github.com/mrcosta/ranbumfy"
+repository = "https://github.com/mrcosta/ranbumfy"
+keywords = ["cli", "spotify", "music"]
+categories = ["command-line-utilities"]
+
 
 [dependencies]
 rspotify = "0.2.1"
