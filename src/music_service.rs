@@ -1,10 +1,9 @@
-#[cfg(test)]
-use mockers_derive::mocked;
+#[cfg(test)] use mockers_derive::mocked;
 
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
 
-#[mocked]
+#[cfg_attr(test, mocked)]
 pub trait MusicClient {
     fn artist_albums(&self, id: &str) -> Vec<Album>;
     fn user_followed_artists(&self) -> Vec<Artist>;
