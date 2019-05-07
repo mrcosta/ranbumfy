@@ -6,8 +6,14 @@ randomize `n` albums to be listen based in your followed artists
 
 # Executing
 
-* to run: `cargo run`
-
+* create an `.env` file in the root of the project like this:
+```.env
+CLIENT_ID="somevaluefromspotify"
+CLIENT_SECRET="somevaluefromspotify"
+REDIRECT_URI="http://localhost"
+```
+* to run: `cargo run -- -w`
+* or with the binary: `./target/debug/ranbumfy -w`
 
 # contributing
 
