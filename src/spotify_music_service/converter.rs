@@ -11,7 +11,7 @@ pub fn to_albums(spotify_albums: Vec<SimplifiedAlbum>) -> Vec<Album> {
 
             Album {
                 name: spotify_album.name,
-                id: spotify_album.id,
+                id: spotify_album.id.unwrap(),
                 url: url.to_string(),
             }
         })

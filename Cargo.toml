@@ -12,7 +12,7 @@ keywords = ["cli", "spotify", "music"]
 categories = ["command-line-utilities"]
 
 [dependencies]
-rspotify = "0.2.1"
+rspotify = "0.7.0"
 rand = "0.6.1"
 log = "0.4"
 env_logger = "0.6.0"
