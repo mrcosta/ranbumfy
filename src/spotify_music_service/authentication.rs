@@ -6,7 +6,7 @@ use rspotify::{
     clients::{BaseClient, OAuthClient}
 };
 
-pub fn get_spotify_client() -> AuthCodeSpotify {
+pub async fn get_spotify_client() -> AuthCodeSpotify {
     let creds = Credentials::from_env().expect("RSPOTIFY_CLIENT_ID and RSPOTIFY_CLIENT_SECRET must be set");
     let oauth = OAuth::from_env(scopes!("user-follow-read")).expect("RSPOTIFY_REDIRECT_URI must be set");
 
@@ -19,12 +19,12 @@ pub fn get_spotify_client() -> AuthCodeSpotify {
     let spotify = AuthCodeSpotify::with_config(creds, oauth, config);
 
     // Try to read token from cache
-    let token_result = spotify.read_token_cache(true);
+    let token_result = spotify.read_token_cache(true).await;
 
     match token_result {
         Ok(Some(token)) => {
             println!("Using cached token");
-            *spotify.get_token().lock().unwrap() = Some(token);
+            *spotify.get_token().lock().await.unwrap() = Some(token);
         }
         _ => {
             // Request new token
@@ -32,10 +32,10 @@ pub fn get_spotify_client() -> AuthCodeSpotify {
             let url = spotify.get_authorize_url(false).unwrap();
             println!("If browser doesn't open, visit: {}", url);
 
-            match spotify.prompt_for_token(&url) {
+            match spotify.prompt_for_token(&url).await {
                 Ok(_) => {
                     println!("Authorization successful!");
-                    spotify.write_token_cache().ok();
+                    spotify.write_token_cache().await.ok();
                 }
                 Err(e) => {
                     eprintln!("\nAuthentication failed: {}", e);

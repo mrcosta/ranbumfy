@@ -10,28 +10,39 @@ use rspotify::model::artist::FullArtist;
 use rspotify::model::AlbumType;
 use rspotify::model::ArtistId;
 use rspotify::clients::{BaseClient, OAuthClient};
+use async_trait::async_trait;
 
 pub struct SpotifyClient {
     pub client: AuthCodeSpotify,
 }
 
+#[async_trait]
 impl MusicClient for SpotifyClient {
-    fn artist_albums(&self, id: &str) -> Vec<Album> {
+    async fn artist_albums(&self, id: &str) -> Vec<Album> {
         let artist_id = ArtistId::from_id(id).unwrap();
-        let stream = self
-            .client
-            .artist_albums(artist_id, Some(AlbumType::Album), None);
-        let spotify_albums: Vec<_> = stream.filter_map(|item| item.ok()).take(50).collect();
+        // Use manual method to fetch a single page directly (faster than streaming)
+        let result = self.client.artist_albums_manual(
+            artist_id,
+            Some(AlbumType::Album),
+            None,
+            Some(10), // limit
+            None      // offset
+        ).await;
+
+        let spotify_albums = match result {
+            Ok(page) => page.items,
+            Err(_) => Vec::new(),
+        };
 
         to_albums(spotify_albums)
     }
 
-    fn user_followed_artists(&self) -> Vec<Artist> {
+    async fn user_followed_artists(&self) -> Vec<Artist> {
         let mut next_request: Option<String> = None;
         let mut followed_artists = Vec::new();
 
         loop {
-            let response = self.client.current_user_followed_artists(next_request.as_deref(), None);
+            let response = self.client.current_user_followed_artists(next_request.as_deref(), None).await;
             let page = response.ok().unwrap();
 
             fill_followed_artists(page.items.clone(), &mut followed_artists);

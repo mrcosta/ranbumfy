@@ -8,7 +8,8 @@ use spotify_music_service::SpotifyClient;
 use user::UserService;
 use clap::App;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // TODO: draw a recent followed artist to listen to
     // get followed artists that release album in 2019 and it's events
     // implement display for artists
@@ -20,18 +21,18 @@ fn main() {
 
     let matches = app.get_matches();
 
-    let user_service = init();
+    let user_service = init().await;
     if matches.is_present("with-albums") {
-        user_service.draw_albums_to_list();
+        user_service.draw_albums_to_list().await;
     }
 }
 
-fn init() -> UserService {
+async fn init() -> UserService {
     env_logger::init();
 
     UserService {
         music_client: Box::new(SpotifyClient {
-            client: get_spotify_client(),
+            client: get_spotify_client().await,
         }),
     }
 }

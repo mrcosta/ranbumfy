@@ -11,30 +11,56 @@ pub struct UserService {
 }
 
 impl UserService {
-    pub fn draw_albums_to_list(&self) -> Vec<Album> {
-        let artists = self.music_client.user_followed_artists();
+    pub async fn draw_albums_to_list(&self) -> Vec<Album> {
+        let artists = self.music_client.user_followed_artists().await;
+
+        println!("Fetching 15 random albums in parallel...\n");
+
+        // Generate 15 random artists upfront
+        let mut selected_artists = Vec::new();
+        for _ in 0..15 {
+            selected_artists.push(randomize_artist(&artists));
+        }
+
+        // Fetch all albums in parallel using futures
+        let album_futures: Vec<_> = selected_artists
+            .iter()
+            .map(|artist| {
+                let artist_id = artist.id.clone();
+                async move {
+                    self.music_client.artist_albums(&artist_id).await
+                }
+            })
+            .collect();
+
+        // Wait for all requests to complete
+        let album_results = futures::future::join_all(album_futures).await;
+
+        // Process results and print
         let mut drawn_albums = Vec::new();
+        let mut count = 1;
 
-        while drawn_albums.len() < 15 {
-            let randomized_artist = randomize_artist(&artists);
-
-            let albums = self.music_client.artist_albums(&randomized_artist.id);
-
+        for (artist, albums) in selected_artists.iter().zip(album_results.iter()) {
             // Print artist even if they have no albums
             if albums.is_empty() {
-                println!("Listen to {} (no albums available on Spotify)", randomized_artist.name);
+                println!("Listen to {} (no albums available on Spotify)", artist.name);
                 continue;
             }
 
-            let randomized_album = randomized_artist.draw_an_album(albums);
+            let randomized_album = artist.draw_an_album(albums.clone());
             println!(
-                "Listen to {} from {}: {}",
-                randomized_album.name, randomized_artist.name, randomized_album.url
+                "{}. Listen to {} from {}: {}",
+                count,
+                randomized_album.name,
+                artist.name,
+                randomized_album.url
             );
 
             drawn_albums.push(randomized_album);
+            count += 1;
         }
 
+        println!("\nDone! Found {} albums to listen to.", drawn_albums.len());
         drawn_albums
     }
 }
