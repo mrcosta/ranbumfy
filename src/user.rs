@@ -15,10 +15,17 @@ impl UserService {
         let artists = self.music_client.user_followed_artists();
         let mut drawn_albums = Vec::new();
 
-        for _ in 0..7 {
+        while drawn_albums.len() < 15 {
             let randomized_artist = randomize_artist(&artists);
 
             let albums = self.music_client.artist_albums(&randomized_artist.id);
+
+            // Print artist even if they have no albums
+            if albums.is_empty() {
+                println!("Listen to {} (no albums available on Spotify)", randomized_artist.name);
+                continue;
+            }
+
             let randomized_album = randomized_artist.draw_an_album(albums);
             println!(
                 "Listen to {} from {}: {}",
@@ -49,7 +56,7 @@ mod test {
     use mockers::Scenario;
 
     #[test]
-    fn test_get_followed_artist_and_drawn_7_albums() {
+    fn test_get_followed_artist_and_drawn_15_albums() {
         let scenario = Scenario::new();
         let cond = scenario.create_mock_for::<MusicClient>();
 
@@ -67,7 +74,7 @@ mod test {
         scenario.expect(
             cond.artist_albums_call("muse_123_id")
                 .and_return_clone(vec![album])
-                .times(7),
+                .times(15),
         );
 
         let user_service = UserService {
@@ -76,6 +83,6 @@ mod test {
 
         let drawn_albums = user_service.draw_albums_to_list();
 
-        assert_eq!(drawn_albums.len(), 7);
+        assert_eq!(drawn_albums.len(), 15);
     }
 }
