@@ -9,6 +9,7 @@ pub struct Artist {
 #[derive(Clone)]
 pub struct Album {
     pub name: String,
+    #[allow(dead_code)]
     pub id: String,
     pub url: String,
 }

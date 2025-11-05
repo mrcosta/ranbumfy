@@ -10,7 +10,6 @@ use rspotify::model::artist::FullArtist;
 use rspotify::model::AlbumType;
 use rspotify::model::ArtistId;
 use rspotify::clients::{BaseClient, OAuthClient};
-use rspotify::prelude::Id;
 
 pub struct SpotifyClient {
     pub client: AuthCodeSpotify,
