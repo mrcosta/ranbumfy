@@ -8,10 +8,11 @@ randomize `n` albums to be listen based in your followed artists
 
 * create an `.env` file in the root of the project like this:
 ```.env
-CLIENT_ID="somevaluefromspotify"
-CLIENT_SECRET="somevaluefromspotify"
-REDIRECT_URI="http://localhost"
+RSPOTIFY_CLIENT_ID="get me in https://developer.spotify.com/dashboard/"
+RSPOTIFY_CLIENT_SECRET="get me in https://developer.spotify.com/dashboard/"
+RSPOTIFY_REDIRECT_URI="http://localhost"
 ```
+* Make sure `http://localhost` is added to your Spotify app's Redirect URIs in the dashboard
 * to run: `cargo run -- -w`
 * or with the binary: `./target/debug/ranbumfy -w`
 

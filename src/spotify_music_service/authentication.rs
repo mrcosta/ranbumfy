@@ -1,21 +1,54 @@
-use rspotify::spotify::client::Spotify;
-use rspotify::spotify::oauth2::{SpotifyClientCredentials, SpotifyOAuth, TokenInfo};
-use rspotify::spotify::util::get_token;
+use rspotify::{
+    AuthCodeSpotify,
+    Credentials,
+    OAuth,
+    scopes,
+    clients::{BaseClient, OAuthClient}
+};
 
-pub fn get_spotify_client() -> Spotify {
-    let token_info = get_token_info();
+pub fn get_spotify_client() -> AuthCodeSpotify {
+    let creds = Credentials::from_env().expect("RSPOTIFY_CLIENT_ID and RSPOTIFY_CLIENT_SECRET must be set");
+    let oauth = OAuth::from_env(scopes!("user-follow-read")).expect("RSPOTIFY_REDIRECT_URI must be set");
 
-    let client_credential = SpotifyClientCredentials::default()
-        .token_info(token_info)
-        .build();
+    let config = rspotify::Config {
+        token_cached: true,
+        token_refreshing: true,
+        ..Default::default()
+    };
 
-    Spotify::default()
-        .client_credentials_manager(client_credential)
-        .build()
-}
+    let spotify = AuthCodeSpotify::with_config(creds, oauth, config);
 
-fn get_token_info() -> TokenInfo {
-    let mut oauth = SpotifyOAuth::default().scope("user-follow-read").build();
+    // Try to read token from cache
+    let token_result = spotify.read_token_cache(true);
 
-    get_token(&mut oauth).unwrap()
+    match token_result {
+        Ok(Some(token)) => {
+            println!("Using cached token");
+            *spotify.get_token().lock().unwrap() = Some(token);
+        }
+        _ => {
+            // Request new token
+            println!("\nOpening browser for Spotify authorization...");
+            let url = spotify.get_authorize_url(false).unwrap();
+            println!("If browser doesn't open, visit: {}", url);
+
+            match spotify.prompt_for_token(&url) {
+                Ok(_) => {
+                    println!("Authorization successful!");
+                    spotify.write_token_cache().ok();
+                }
+                Err(e) => {
+                    eprintln!("\nAuthentication failed: {}", e);
+                    eprintln!("\nMake sure to:");
+                    eprintln!("1. Authorize the app in your browser");
+                    eprintln!("2. Copy the FULL redirect URL (http://localhost/?code=...)");
+                    eprintln!("3. Paste it when prompted");
+                    eprintln!("\nAlso verify 'http://localhost' is in your Spotify app's Redirect URIs");
+                    std::process::exit(1);
+                }
+            }
+        }
+    }
+
+    spotify
 }

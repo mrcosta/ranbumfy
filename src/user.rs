@@ -7,7 +7,7 @@ use rand::thread_rng;
 use rand::Rng;
 
 pub struct UserService {
-    pub music_client: Box<MusicClient>,
+    pub music_client: Box<dyn MusicClient>,
 }
 
 impl UserService {
@@ -33,7 +33,7 @@ impl UserService {
 }
 
 fn randomize_artist(artists: &[Artist]) -> Artist {
-    let randomized_artist_index = thread_rng().gen_range(0, artists.len());
+    let randomized_artist_index = thread_rng().gen_range(0..artists.len());
     let artist = &artists[randomized_artist_index];
 
     Artist {

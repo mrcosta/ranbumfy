@@ -6,3 +6,4 @@
 *.swp
 .vscode
 *.iml
+settings.local.json

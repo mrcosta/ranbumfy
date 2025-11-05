@@ -10,13 +10,13 @@ homepage = "https://github.com/mrcosta/ranbumfy"
 repository = "https://github.com/mrcosta/ranbumfy"
 keywords = ["cli", "spotify", "music"]
 categories = ["command-line-utilities"]
+resolver = "2"
 
 [dependencies]
-rspotify = "0.7.0"
-rand = "0.6.1"
-log = "0.4"
-env_logger = "0.6.0"
-clap = "2.32"
+rspotify = { version = "0.12", default-features = false, features = ["client-ureq", "ureq-rustls-tls", "cli", "env-file"] }
+rand = "0.8"
+env_logger = "0.10"
+clap = "2.34"
 
 [dev-dependencies]
 mockers = "0.13.1"

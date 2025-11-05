@@ -15,7 +15,7 @@ pub struct Album {
 
 impl Artist {
     pub fn draw_an_album(&self, mut albums: Vec<Album>) -> Album {
-        let randomized_album_index = thread_rng().gen_range(0, albums.len());
+        let randomized_album_index = thread_rng().gen_range(0..albums.len());
 
         albums.swap_remove(randomized_album_index)
     }

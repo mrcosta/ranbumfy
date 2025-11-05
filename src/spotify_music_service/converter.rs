@@ -1,7 +1,8 @@
 use crate::user::artist::Album;
 use crate::user::artist::Artist;
-use rspotify::spotify::model::album::SimplifiedAlbum;
-use rspotify::spotify::model::artist::FullArtist;
+use rspotify::model::album::SimplifiedAlbum;
+use rspotify::model::artist::FullArtist;
+use rspotify::prelude::Id;
 
 pub fn to_albums(spotify_albums: Vec<SimplifiedAlbum>) -> Vec<Album> {
     spotify_albums
@@ -11,7 +12,7 @@ pub fn to_albums(spotify_albums: Vec<SimplifiedAlbum>) -> Vec<Album> {
 
             Album {
                 name: spotify_album.name,
-                id: spotify_album.id.unwrap(),
+                id: spotify_album.id.unwrap().id().to_string(),
                 url: url.to_string(),
             }
         })
@@ -23,7 +24,7 @@ pub fn to_artists(spotify_artists: Vec<FullArtist>) -> Vec<Artist> {
         .into_iter()
         .map(|spotify_artist| Artist {
             name: spotify_artist.name,
-            id: spotify_artist.id,
+            id: spotify_artist.id.id().to_string(),
         })
         .collect::<Vec<Artist>>()
 }
@@ -32,7 +33,7 @@ pub fn to_artists(spotify_artists: Vec<FullArtist>) -> Vec<Artist> {
 mod test {
 
     use super::*;
-    use rspotify::spotify::senum::Type;
+    use rspotify::model::Type;
     use std::collections::HashMap;
 
     #[test]
