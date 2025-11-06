@@ -7,3 +7,4 @@
 .vscode
 *.iml
 settings.local.json
+.ranbumfy_artists_cache.json

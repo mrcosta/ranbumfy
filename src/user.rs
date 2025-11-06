@@ -5,16 +5,41 @@ use crate::user::artist::Album;
 use crate::user::artist::Artist;
 use rand::thread_rng;
 use rand::Rng;
+use std::path::PathBuf;
+use std::fs;
 
 pub struct UserService {
     pub music_client: Box<dyn MusicClient>,
 }
 
 impl UserService {
-    pub async fn draw_albums_to_list(&self) -> Vec<Album> {
+    async fn get_followed_artists_cached(&self) -> Vec<Artist> {
+        let cache_path = get_cache_path();
+
+        // Try to load from cache first
+        if let Ok(cached_artists) = load_artists_from_cache(&cache_path) {
+            println!("Using cached artists (delete {} to refresh)", cache_path.display());
+            return cached_artists;
+        }
+
+        // Cache miss or invalid, fetch from API
+        println!("Fetching followed artists from Spotify...");
         let artists = self.music_client.user_followed_artists().await;
 
-        println!("Fetching 15 random albums in parallel...\n");
+        // Save to cache
+        if let Err(e) = save_artists_to_cache(&cache_path, &artists) {
+            eprintln!("Warning: Failed to cache artists: {}", e);
+        } else {
+            println!("Cached {} artists to {}", artists.len(), cache_path.display());
+        }
+
+        artists
+    }
+
+    pub async fn draw_albums_to_list(&self) -> Vec<Album> {
+        let artists = self.get_followed_artists_cached().await;
+
+        println!("Fetching 15 random albums...\n");
 
         // Generate 15 random artists upfront
         let mut selected_artists = Vec::new();
@@ -73,6 +98,24 @@ fn randomize_artist(artists: &[Artist]) -> Artist {
         id: artist.id.to_owned(),
         name: artist.name.to_owned(),
     }
+}
+
+fn get_cache_path() -> PathBuf {
+    let mut path = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
+    path.push(".ranbumfy_artists_cache.json");
+    path
+}
+
+fn load_artists_from_cache(path: &PathBuf) -> Result<Vec<Artist>, Box<dyn std::error::Error>> {
+    let contents = fs::read_to_string(path)?;
+    let artists: Vec<Artist> = serde_json::from_str(&contents)?;
+    Ok(artists)
+}
+
+fn save_artists_to_cache(path: &PathBuf, artists: &[Artist]) -> Result<(), Box<dyn std::error::Error>> {
+    let json = serde_json::to_string_pretty(artists)?;
+    fs::write(path, json)?;
+    Ok(())
 }
 
 #[cfg(test)]

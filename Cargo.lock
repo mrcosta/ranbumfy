@@ -1130,6 +1130,8 @@ dependencies = [
  "mockers_derive",
  "rand",
  "rspotify",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 

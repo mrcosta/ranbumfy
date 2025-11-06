@@ -1,6 +1,8 @@
 use rand::thread_rng;
 use rand::Rng;
+use serde::{Deserialize, Serialize};
 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Artist {
     pub name: String,
     pub id: String,
